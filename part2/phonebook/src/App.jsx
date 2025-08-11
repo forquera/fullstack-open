@@ -52,6 +52,17 @@ const App = () => {
     setFilterValue(event.target.value);
   };
 
+  const handleEliminar = (id) => {
+    if (window.confirm("Desea eliminar a la persona?")) {
+      personService.deletePerson(id).then((personEliminada) => {
+        const newPersons = persons.filter(
+          (person) => person.id != personEliminada.id
+        );
+        setPersons(newPersons);
+      });
+    }
+  };
+
   const personsToShow =
     filterValue === ""
       ? persons
@@ -74,7 +85,7 @@ const App = () => {
         handleNumberChange={handleNumberChange}
       />
       <h2>Numbers</h2>
-      <Persons persons={personsToShow} />
+      <Persons persons={personsToShow} handleEliminar={handleEliminar} />
     </div>
   );
 };
