@@ -22,16 +22,30 @@ const App = () => {
 
     const found = persons.find((person) => person.name === newName);
 
-    if (found) {
-      alert(`${newName} is already added to phonebook`);
-
-      return;
-    }
-
     const newObject = {
       name: newName,
       number: newNumber,
     };
+
+    if (found) {
+      if (
+        window.confirm(
+          `${newName} ya se encuentra en la agenda, quiere cambiar el numero por el nuevo?`
+        )
+      ) {
+        personService
+          .updatePerson(found.id, newObject)
+          .then((personModified) => {
+            const newPersons = persons.map((person) =>
+              person.id != personModified.id ? person : personModified
+            );
+            setPersons(newPersons);
+            setNewName("");
+            setNewNumber("");
+          });
+      }
+      return;
+    }
 
     personService.create(newObject).then((returnedPerson) => {
       setPersons(persons.concat(returnedPerson));
