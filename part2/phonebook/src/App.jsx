@@ -3,13 +3,15 @@ import { Filter } from "./components/filter";
 import { PersonForm } from "./components/personForm";
 import { Persons } from "./components/persons";
 import personService from "./services/persons";
-import axios from "axios";
+import { Notification } from "./components/notification";
+import "./index.css";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [filterValue, setFilterValue] = useState("");
+  const [succesMessage, setSuccesMessage] = useState(null);
 
   const getPersons = () => {
     personService.getAll().then((persons) => setPersons(persons));
@@ -43,6 +45,11 @@ const App = () => {
             setNewName("");
             setNewNumber("");
           });
+
+        setSuccesMessage("Se modifico el numero correctamente.");
+        setTimeout(() => {
+          setSuccesMessage(null);
+        }, 5000);
       }
       return;
     }
@@ -51,6 +58,10 @@ const App = () => {
       setPersons(persons.concat(returnedPerson));
       setNewName("");
       setNewNumber("");
+      setSuccesMessage("Se agrego la persona correctamente.");
+      setTimeout(() => {
+        setSuccesMessage(null);
+      }, 5000);
     });
   };
 
@@ -88,6 +99,7 @@ const App = () => {
 
   return (
     <div>
+      <Notification message={succesMessage} />
       <h2>Phonebook</h2>
       <Filter filterValue={filterValue} handleFilterValue={handleFilterValue} />
       <h2>Add</h2>
