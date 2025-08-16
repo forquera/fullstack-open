@@ -1,7 +1,15 @@
-export const Notification = ({ message }) => {
+export const SuccessNotification = ({ message }) => {
   if (message === null) {
     return null;
   }
 
   return <div className="success">{message}</div>;
+};
+
+export const ErrorNotification = ({ message }) => {
+  if (message === null) {
+    return null;
+  }
+
+  return <div className="error">{message}</div>;
 };

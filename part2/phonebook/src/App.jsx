@@ -3,7 +3,10 @@ import { Filter } from "./components/filter";
 import { PersonForm } from "./components/personForm";
 import { Persons } from "./components/persons";
 import personService from "./services/persons";
-import { Notification } from "./components/notification";
+import {
+  SuccessNotification,
+  ErrorNotification,
+} from "./components/notification";
 import "./index.css";
 
 const App = () => {
@@ -12,12 +15,13 @@ const App = () => {
   const [newNumber, setNewNumber] = useState("");
   const [filterValue, setFilterValue] = useState("");
   const [succesMessage, setSuccesMessage] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
 
   const getPersons = () => {
     personService.getAll().then((persons) => setPersons(persons));
   };
 
-  useEffect(getPersons, []);
+  useEffect(getPersons, [succesMessage, errorMessage]);
 
   const addName = (event) => {
     event.preventDefault();
@@ -42,15 +46,22 @@ const App = () => {
               person.id != personModified.id ? person : personModified
             );
             setPersons(newPersons);
-            setNewName("");
-            setNewNumber("");
+            setSuccesMessage("Se modifico el numero correctamente.");
+            setTimeout(() => {
+              setSuccesMessage(null);
+            }, 5000);
+          })
+          .catch((error) => {
+            setErrorMessage(
+              `La persona ${found.name} ya fue borrada del servidor.`
+            );
+            setTimeout(() => {
+              setErrorMessage(null);
+            }, 5000);
           });
-
-        setSuccesMessage("Se modifico el numero correctamente.");
-        setTimeout(() => {
-          setSuccesMessage(null);
-        }, 5000);
       }
+      setNewName("");
+      setNewNumber("");
       return;
     }
 
@@ -99,7 +110,8 @@ const App = () => {
 
   return (
     <div>
-      <Notification message={succesMessage} />
+      <SuccessNotification message={succesMessage} />
+      <ErrorNotification message={errorMessage} />
       <h2>Phonebook</h2>
       <Filter filterValue={filterValue} handleFilterValue={handleFilterValue} />
       <h2>Add</h2>
