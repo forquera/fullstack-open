@@ -1,6 +1,4 @@
 export const Country = ({ country }) => {
-  console.log("PAIS: ", country);
-  console.log("LENGUAJES: ", country.languages);
   return (
     <>
       <h1>{country.name.common}</h1>

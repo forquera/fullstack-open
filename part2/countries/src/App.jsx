@@ -76,7 +76,10 @@ function App() {
       <label>find countries:</label>
       <input value={searchValue} onChange={handleInput}></input>
       <Message message={message} />
-      <CountriesList countries={countriesToShow} />
+      <CountriesList
+        countries={countriesToShow}
+        setSearchValue={setSearchValue}
+      />
       {country && <Country country={country} />}
     </>
   );
