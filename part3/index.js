@@ -40,6 +40,14 @@ app.get("/api/persons/:id", (request, response) => {
   }
 });
 
+app.delete("/api/persons/:id", (request, response) => {
+  const person_id = Number(request.params.id);
+
+  persons = persons.filter((person) => person.id !== person_id);
+
+  response.status(204).end();
+});
+
 app.get("/info", (request, response) => {
   const tamanio = persons.length;
   const fecha = new Date().toLocaleString();
