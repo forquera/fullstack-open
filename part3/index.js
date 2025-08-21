@@ -32,11 +32,31 @@ app.get("/api/persons", (request, response) => {
 
 app.post("/api/persons", (request, response) => {
   const person = request.body;
-  console.log("PERSONA: ", request);
   const new_id = Math.floor(Math.random() * (9999 - 10) + 10);
 
-  person.id = new_id;
+  if (!person.name) {
+    return response.status(400).json({
+      error: "Name is missing!",
+    });
+  }
 
+  if (!person.number) {
+    return response.status(400).json({
+      error: "Number is missing!",
+    });
+  }
+
+  const person_found = persons.find(
+    (person_f) => person_f.name === person.name
+  );
+
+  if (person_found) {
+    return response.status(400).json({
+      error: "Name already in phonebook!",
+    });
+  }
+
+  person.id = new_id;
   persons = persons.concat(person);
 
   response.json(person);
