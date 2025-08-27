@@ -90,11 +90,8 @@ const App = () => {
 
   const handleEliminar = (id) => {
     if (window.confirm("Desea eliminar a la persona?")) {
-      personService.deletePerson(id).then((personEliminada) => {
-        const newPersons = persons.filter(
-          (person) => person.id != personEliminada.id
-        );
-        setPersons(newPersons);
+      personService.deletePerson(id).then(() => {
+        getPersons();
       });
     }
   };
