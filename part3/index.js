@@ -3,6 +3,8 @@ const cors = require("cors");
 var morgan = require("morgan");
 const app = express();
 
+const mongo_db = mongodb+srv://elixir:SUD_Elixir22@cluster0.ab5knrj.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+
 morgan.token("body", function (req, res) {
   return JSON.stringify(req.body);
 });
