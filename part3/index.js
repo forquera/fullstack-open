@@ -75,11 +75,13 @@ app.get("/api/persons/:id", (request, response) => {
 });
 
 app.delete("/api/persons/:id", (request, response) => {
-  const person_id = Number(request.params.id);
+  const person_id = request.params.id;
 
-  persons = persons.filter((person) => person.id !== person_id);
-
-  response.status(204).end();
+  Person.findByIdAndDelete(person_id)
+    .then((result) => {
+      response.status(204).end();
+    })
+    .catch((error) => console.log("ERROR DELETE: ", error));
 });
 
 app.get("/info", (request, response) => {
