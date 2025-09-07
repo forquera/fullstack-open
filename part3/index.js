@@ -29,7 +29,6 @@ app.get("/api/persons", (request, response) => {
 
 app.post("/api/persons", (request, response) => {
   const person = request.body;
-  const new_id = Math.floor(Math.random() * (9999 - 10) + 10);
 
   if (!person.name) {
     return response.status(400).json({
@@ -43,20 +42,24 @@ app.post("/api/persons", (request, response) => {
     });
   }
 
-  const person_found = persons.find(
-    (person_f) => person_f.name === person.name
-  );
+  // Person.find({}).then((personas) => {
+  //   console.log("BUSCADO: ", personas);
+  // });
 
-  if (person_found) {
-    return response.status(400).json({
-      error: "Name already in phonebook!",
-    });
-  }
+  // if (person_found) {
+  //   return response.status(400).json({
+  //     error: "Name already in phonebook!",
+  //   });
+  // }
 
-  person.id = new_id;
-  persons = persons.concat(person);
+  const newPerson = new Person({
+    name: person.name,
+    number: person.number,
+  });
 
-  response.json(person);
+  newPerson.save().then((savedPerson) => {
+    response.json(savedPerson);
+  });
 });
 
 app.get("/api/persons/:id", (request, response) => {
