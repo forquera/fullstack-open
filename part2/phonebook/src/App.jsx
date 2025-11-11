@@ -65,15 +65,21 @@ const App = () => {
       return;
     }
 
-    personService.create(newObject).then((returnedPerson) => {
-      setPersons(persons.concat(returnedPerson));
-      setNewName("");
-      setNewNumber("");
-      setSuccesMessage("Se agrego la persona correctamente.");
-      setTimeout(() => {
-        setSuccesMessage(null);
-      }, 5000);
-    });
+    personService
+      .create(newObject)
+      .then((returnedPerson) => {
+        setPersons(persons.concat(returnedPerson));
+        setNewName("");
+        setNewNumber("");
+        setSuccesMessage("Se agrego la persona correctamente.");
+        setTimeout(() => {
+          setSuccesMessage(null);
+        }, 5000);
+      })
+      .catch((error) => {
+        console.log("ERROR: ", error.response.data.error);
+        setErrorMessage(error.response.data.error);
+      });
   };
 
   const handleNameChange = (event) => {
