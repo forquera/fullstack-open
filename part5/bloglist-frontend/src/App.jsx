@@ -1,7 +1,12 @@
-import { useState, useEffect, useTransition } from "react";
+import { useState, useEffect } from "react";
 import Blog from "./components/Blog";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
+import {
+  SuccessNotification,
+  ErrorNotification,
+} from "./components/notification";
+import "./index.css";
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -12,6 +17,7 @@ const App = () => {
   const [newTitle, setNewTitle] = useState("");
   const [newAuthor, setNewAuthor] = useState("");
   const [newUrl, setNewUrl] = useState("");
+  const [succesMessage, setSuccesMessage] = useState(null);
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
@@ -49,7 +55,7 @@ const App = () => {
       setErrorMessage("Wrong credentials");
       setTimeout(() => {
         setErrorMessage(null);
-      }, 500);
+      }, 5000);
     }
   };
 
@@ -88,11 +94,12 @@ const App = () => {
 
       setBlogs(blogs.concat(blog));
       setNewTitle("");
+      setSuccesMessage(`Nuevo blog ${blog.title} creado `);
     } catch (e) {
       setErrorMessage("Error al crear blog.");
       setTimeout(() => {
         setErrorMessage(null);
-      }, 500);
+      }, 5000);
     }
   };
 
@@ -126,6 +133,8 @@ const App = () => {
   if (user === null) {
     return (
       <div>
+        <SuccessNotification message={succesMessage} />
+        <ErrorNotification message={errorMessage} />
         <h2>Log in to application</h2>
         {loginForm()}
       </div>
@@ -134,6 +143,8 @@ const App = () => {
 
   return (
     <div>
+      <SuccessNotification message={succesMessage} />
+      <ErrorNotification message={errorMessage} />
       <div>
         <button onClick={handleLogout}>logout</button>
       </div>
